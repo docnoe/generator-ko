@@ -80,16 +80,16 @@ var KoGenerator = yeoman.generators.Base.extend({
     },
 
     templating: function() {
-        var excluceExtensions = [];
+        var excludeExtensions = [];
         if (this.usesTypeScript) {
-            excluceExtensions.push(".js");
-            excluceExtensions.push(".coffee");
+            excludeExtensions.push(".js");
+            excludeExtensions.push(".coffee");
         } else if (this.usesCoffeeScript) {
-            excluceExtensions.push(".js");
-            excluceExtensions.push(".ts");
+            excludeExtensions.push(".js");
+            excludeExtensions.push(".ts");
         } else {
-            excluceExtensions.push(".coffee");
-            excluceExtensions.push(".ts");
+            excludeExtensions.push(".coffee");
+            excludeExtensions.push(".ts");
         }
 
         var excludeExtension = this.usesTypeScript ? '.js' : '.ts';
@@ -126,10 +126,13 @@ var KoGenerator = yeoman.generators.Base.extend({
             dot: true,
             cwd: root
         }).filter(function(filename) {
-            if(typeof excludeExtension !== "string"){
-
+            if (excludeExtension) {
+                if (typeof excludeExtension !== "string") { //not a string = is array of extensions
+                  return excludeExtension.indexOf(path.extname(filename)) === -1;
+                }
+                return path.extname(filename) !== excludeExtension;
             }
-            return !excludeExtension || path.extname(filename) !== excludeExtension;
+            return true
         });
 
         for (var i = 0; i < files.length; i++) {

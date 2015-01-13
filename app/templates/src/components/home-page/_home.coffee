@@ -2,13 +2,13 @@ define [
 	"knockout"
 	"text!./home.html"
 ], (ko, homeTemplate) ->
-	HomeViewModel = (route) ->
-    @message = ko.observable('Welcome to <%= longName.replace("'", "\\ '") %>!');
 
-	HomeViewModel::doSomething = ->
-		@message "You invoked doSomething() on the viewmodel."
-		return
+	class HomeViewModel
+		constructor: (route) ->
+			@message = ko.observable('Welcome to <%= longName.replace("'", "\\ '") %>!');
 
-		viewModel: HomeViewModel
-		template: homeTemplate
+		doSomething: ->
+			@message "You invoked doSomething() on the viewmodel."
 
+	viewModel: HomeViewModel
+	template: homeTemplate
