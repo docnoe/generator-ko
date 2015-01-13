@@ -3,7 +3,7 @@ var fs = require('fs'), vm = require('vm'), merge = require('deeply'), chalk = r
 
 // Gulp and plugins
 var gulp = require('gulp'), rjs = require('gulp-requirejs-bundler'), concat = require('gulp-concat'), clean = require('gulp-clean'),
-    replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace')<% if(usesTypeScript) { %>, typescript = require('gulp-tsc')<% } %>;
+    replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace')<% if(!usesTypeScript) { %>, browserSync = require('browser-sync')<% } %> <% if(usesTypeScript) { %>, typescript = require('gulp-tsc')<% } %> <% if(usesCoffeeScript) { %>, coffee = require('gulp-coffee'), gutil = require('gulp-util') <% } %>;
 
 // Config
 var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require.config.js') + '; require;');
@@ -40,8 +40,18 @@ gulp.task('ts', function() {
         .pipe(gulp.dest('./'));
 });
 <% } %>
+
+<% if (usesCoffeeScript) { %>
+// Compile all .coffee files, producing .js
+gulp.task('coffee', function() {
+  return gulp.src('./src/**/*.coffee')
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest('./src/'))
+});
+<% } %>
+
 // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
-gulp.task('js', <% if (usesTypeScript) { %>['ts'], <% } %>function () {
+gulp.task('js', <% if (usesTypeScript) { %>['ts'], <% } %> <% if (usesCoffeeScript) { %>['coffee'], <% } %>function () {
     return rjs(requireJsOptimizerConfig)
         .pipe(uglify({ preserveComments: 'some' }))
         .pipe(gulp.dest('./dist/'));
@@ -85,7 +95,44 @@ gulp.task('clean', function() {
     return es.merge(distContents, generatedJs).pipe(clean());
 });
 <% } %>
-gulp.task('default', ['html', 'js', 'css'], function(callback) {
+
+
+<% if (!usesTypeScript) { %>
+gulp.task('sync', function() {
+    browserSync({
+        server: {
+            baseDir: "./dist/"
+        }
+    });
+});
+
+gulp.task('debugSync', function() {
+    browserSync({
+        server: {
+            baseDir: "./src/"
+        }
+    });
+});
+
+gulp.task('reload', function() {
+    browserSync.reload();
+});
+
+gulp.task('production', ['html', 'js', 'css', 'sync'], function() {
+    gulp.watch(["src/**/*.html"], ["html","reload"]);
+    gulp.watch(["src/**/*.js", "src/**/*.coffee"], ["js", "reload"]);
+    gulp.watch(["src/**/*.css"], ["css", "reload"]);
+    console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
+});
+
+gulp.task("debug", [<% if (usesCoffeeScript) { %>'coffee', <% } %>"debugSync"], function() {
+    <% if (usesCoffeeScript) { %> gulp.watch(["src/**/*.coffee"], ["coffee"]);<% } %>
+    gulp.watch(["src/**/*.js", "src/**/*.html"], ["reload"]);
+});
+
+<% } %>
+
+gulp.task('default', [<% if (usesCoffeeScript) { %>'coffee', <% } %>'html', 'js', 'css'], function(callback) {
     callback();
     console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
 });
