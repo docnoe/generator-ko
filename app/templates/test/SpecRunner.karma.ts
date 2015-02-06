@@ -11,7 +11,7 @@ for (var file in __karma__.files) {
 }
 
 requirejs.config({
-    baseUrl: '/base/src',
+    baseUrl: '/base/<%= sourceBase %>',
     deps: tests,
     callback: __karma__.start
 });

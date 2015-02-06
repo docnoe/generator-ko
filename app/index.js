@@ -67,6 +67,10 @@ var KoGenerator = yeoman.generators.Base.extend({
             name: 'includeTests',
             message: 'Do you want to include automated tests, using Jasmine and Karma?',
             default: true
+        }, {
+            name: 'sourceBase',
+            message: 'How should your source directory be called? ',
+            default: "src"
         }];
 
         this.prompt(prompts, function(props) {
@@ -75,6 +79,8 @@ var KoGenerator = yeoman.generators.Base.extend({
             this.usesTypeScript = props.codeLanguage === languageChoice.ts;
             this.usesCoffeeScript = props.codeLanguage === languageChoice.coffee;
             this.includeTests = props.includeTests;
+            this.sourceBase = props.sourceBase;
+
             done();
         }.bind(this));
     },
@@ -94,7 +100,7 @@ var KoGenerator = yeoman.generators.Base.extend({
 
         var excludeExtension = this.usesTypeScript ? '.js' : '.ts';
 
-        this._processDirectory('src', 'src', excludeExtensions);
+        this._processDirectory('src', this.sourceBase, excludeExtensions);
         this.template('_package.json', 'package.json');
         this.template('_bower.json', 'bower.json');
         this.template('_gulpfile.js', 'gulpfile.js');

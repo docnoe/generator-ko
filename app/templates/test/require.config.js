@@ -1,7 +1,7 @@
 (function () {
   // Resolve all AMD modules relative to the 'src' directory, to produce the
   // same behavior that occurs at runtime
-  require.baseUrl = '../src/';
+  require.baseUrl = '../<%= sourceBase %>/';
 
   // It's not obvious, but this is a way of making Jasmine load and run in an AMD environment
   // Credit: http://stackoverflow.com/a/20851265

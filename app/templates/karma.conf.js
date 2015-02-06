@@ -12,18 +12,18 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'src/app/require.config.js',
+      '<%= sourceBase %>/app/require.config.js',
       'test/require.config.js',
       'test/SpecRunner.karma.js',
-      { pattern: 'src/**/*.js', included: false },
-      { pattern: 'src/**/*.html', included: false },
+      { pattern: '<%= sourceBase %>/**/*.js', included: false },
+      { pattern: '<%= sourceBase %>/**/*.html', included: false },
       { pattern: 'test/**/*.js', included: false }
     ],
 
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
