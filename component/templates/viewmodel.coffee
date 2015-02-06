@@ -10,7 +10,6 @@ define [
 			# for example cancelling setTimeouts or disposing Knockout subscriptions/computeds.
 			@dispose = ->
 
-	return {
-		viewModel: <%= viewModelClassName %> ,
-		template: templateMarkup
-	}
+
+	viewModel: <%= viewModelClassName %>
+	template: templateMarkup
