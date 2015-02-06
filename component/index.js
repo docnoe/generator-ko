@@ -6,9 +6,15 @@ var chalk = require('chalk');
 
 var ComponentGenerator = yeoman.generators.NamedBase.extend({
 
+    detectSourceBase: function() {
+        var bowerrc = fs.readFileSync(".bowerrc");
+        bowerrc = JSON.parse(bowerrc);
+        this.sourceBase = bowerrc.directory.split("bower_modules")[0]
+    },
+
     detectCodeLanguage: function() {
-        this.usesTypeScript = fs.existsSync('src/app/startup.ts');
-        this.usesCoffeeScript = fs.existsSync('src/app/startup.coffee');
+        this.usesTypeScript = fs.existsSync(this.sourceBase + 'app/startup.ts')
+        this.usesCoffeeScript = fs.existsSync(this.sourceBase + 'app/startup.coffee')
         this.codeFileExtension = ".js";
         if (this.usesTypeScript) {
             this.codeFileExtension = ".ts";
@@ -28,7 +34,7 @@ var ComponentGenerator = yeoman.generators.NamedBase.extend({
         }
         console.log('Creating component \'' + this.name + '\' (' + codeLanguage + ')...');
         this.componentName = this.name;
-        this.dirname = 'src/components/' + this._.dasherize(this.name) + '/';
+        this.dirname = this.sourceBase + 'components/' + this._.dasherize(this.name) + '/';
         this.filename = this._.dasherize(this.name);
         this.viewModelClassName = this._.classify(this.name);
     },
@@ -39,7 +45,7 @@ var ComponentGenerator = yeoman.generators.NamedBase.extend({
     },
 
     addComponentRegistration: function() {
-        var startupFile = 'src/app/startup' + this.codeFileExtension;
+        var startupFile = 'app/startup' + this.codeFileExtension;
         readIfFileExists.call(this, startupFile, function(existingContents) {
             var existingRegistrationRegex = new RegExp('\\bko\\.components\\.register\\(\s*[\'"]' + this.filename + '[\'"]');
             if (existingRegistrationRegex.exec(existingContents)) {
