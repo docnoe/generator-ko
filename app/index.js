@@ -61,7 +61,7 @@ var KoGenerator = yeoman.generators.Base.extend({
             type: 'list',
             name: 'codeLanguage',
             message: 'What language do you want to use?',
-            choices: [languageChoice.js, languageChoice.ts, languageChoice.coffee]
+            choices: [languageChoice.js, languageChoice.coffee]
         }, {
             type: 'confirm',
             name: 'includeTests',
