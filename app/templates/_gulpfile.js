@@ -5,29 +5,7 @@ var fs = require('fs'), vm = require('vm'), merge = require('deeply'), chalk = r
 var gulp = require('gulp'), rjs = require('gulp-requirejs-bundler'), concat = require('gulp-concat'), clean = require('gulp-clean'),
     replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace')<% if(!usesTypeScript) { %>, browserSync = require('browser-sync')<% } %> <% if(usesTypeScript) { %>, typescript = require('gulp-tsc')<% } %> <% if(usesCoffeeScript) { %>, coffee = require('gulp-coffee'), gutil = require('gulp-util') <% } %>;
 
-// Config
-var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('<%= sourceBase %>/app/require.config.js') + '; require;');
-    requireJsOptimizerConfig = merge(requireJsRuntimeConfig, {
-        out: 'scripts.js',
-        baseUrl: './<%= sourceBase %>',
-        name: 'app/startup',
-        paths: {
-            requireLib: 'bower_modules/requirejs/require'
-        },
-        include: [
-            'requireLib',
-            'components/nav-bar/nav-bar',
-            'components/home-page/home',
-            'text!components/about-page/about.html'
-        ],
-        insertRequire: ['app/startup'],
-        bundles: {
-            // If you want parts of the site to load on demand, remove them from the 'include' list
-            // above, and group them into bundles here.
-            // 'bundle-name': [ 'some/module', 'another/module' ],
-            // 'another-bundle-name': [ 'yet-another-module' ]
-        }
-    });
+
 <% if (usesTypeScript) { %>
 // Compile all .ts files, producing .js and source map files alongside them
 gulp.task('ts', function() {
@@ -52,6 +30,31 @@ gulp.task('coffee', function() {
 
 // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
 gulp.task('js', <% if (usesTypeScript) { %>['ts'], <% } %> <% if (usesCoffeeScript) { %>['coffee'], <% } %>function () {
+    // Config
+    var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('<%= sourceBase %>/app/require.config.js') + '; require;');
+    var requireJsOptimizerConfig = merge(requireJsRuntimeConfig, {
+        out: 'scripts.js',
+        baseUrl: './<%= sourceBase %>',
+        name: 'app/startup',
+        paths: {
+            requireLib: 'bower_modules/requirejs/require'
+        },
+        include: [
+            'requireLib',
+            'components/nav-bar/nav-bar',
+            'components/home-page/home',
+            // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
+            'text!components/about-page/about.html'
+        ],
+        insertRequire: ['app/startup'],
+        bundles: {
+            // If you want parts of the site to load on demand, remove them from the 'include' list
+            // above, and group them into bundles here.
+            // 'bundle-name': [ 'some/module', 'another/module' ],
+            // 'another-bundle-name': [ 'yet-another-module' ]
+        }
+    });
+
     return rjs(requireJsOptimizerConfig)
         .pipe(uglify({ preserveComments: 'some' }))
         .pipe(gulp.dest('./dist/'));

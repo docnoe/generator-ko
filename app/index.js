@@ -115,7 +115,7 @@ var KoGenerator = yeoman.generators.Base.extend({
         }
 
         // Explicitly copy the .js files used by the .ts output, since they're otherwise excluded
-        if (this.usesTypeScript || this.usesCoffeeScript) {
+        if (this.usesTypeScript) {
             this.copy('src/app/require.config.js');
             if (this.usesTypeScript) {
                 this._processDirectory('definitions', 'definitions');
