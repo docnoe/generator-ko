@@ -45,7 +45,7 @@ var ComponentGenerator = yeoman.generators.NamedBase.extend({
     },
 
     addComponentRegistration: function() {
-        var startupFile = 'app/startup' + this.codeFileExtension;
+        var startupFile = this.sourceBase + 'app/startup' + this.codeFileExtension;
         readIfFileExists.call(this, startupFile, function(existingContents) {
             var existingRegistrationRegex = new RegExp('\\bko\\.components\\.register\\(\s*[\'"]' + this.filename + '[\'"]');
             if (existingRegistrationRegex.exec(existingContents)) {
