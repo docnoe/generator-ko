@@ -1,7 +1,7 @@
 define [
-	"knockout"
+  "knockout"
 ], (ko) ->
 
-	class <%= viewModelClassName %>
-		constructor: (params) ->
-			@message = ko.observable("Hello from the <%= name %> singleton!")
+  class <%= viewModelClassName %>
+    constructor: (params) ->
+      @message = ko.observable("Hello from the <%= name %> singleton!")
