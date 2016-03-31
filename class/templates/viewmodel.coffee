@@ -4,4 +4,4 @@ define [
 
   class <%= viewModelClassName %>
     constructor: (params) ->
-      @message = ko.observable("Hello from the <%= name %> singleton!")
+      @message = ko.observable("Hello from the <%= name %> class!")
