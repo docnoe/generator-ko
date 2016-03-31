@@ -19,8 +19,7 @@ module router {
     export var currentRoute = ko.observable(<RouteEntry>{});
 
     var allRoutes = [
-        { url: '',          params: { page: 'home-page' } },
-        { url: 'about',     params: { page: 'about-page' } }
+        { url: '',          params: { page: 'home-page' } }
     ];
 
     // Register routes with crossroads.js
