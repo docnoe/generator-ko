@@ -42,9 +42,8 @@ gulp.task('js', <% if (usesTypeScript) { %>['ts'], <% } %> <% if (usesCoffeeScri
         include: [
             'requireLib',
             'components/nav-bar/nav-bar',
-            'components/home-page/home',
+            'components/home-page/home'
             // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
-            'text!components/about-page/about.html'
         ],
         insertRequire: ['app/startup'],
         bundles: {
