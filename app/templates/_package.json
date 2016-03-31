@@ -21,6 +21,7 @@
     "gulp-coffee": "^2.2.0",
     "coffee-script": "^1.8.0",
     "gulp-util": "^3.0.2",
+     "gulp-sourcemaps": "^1.6.0",
 <% } %>
 <% if(includeTests) { %>
     "karma": "^0.12.15",
