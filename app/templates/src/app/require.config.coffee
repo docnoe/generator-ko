@@ -10,6 +10,8 @@ require =
     "knockout-projections": "bower_modules/knockout-projections/dist/knockout-projections"
     signals: "bower_modules/js-signals/dist/signals.min"
     text: "bower_modules/requirejs-text/text"
+    # [Scaffolded plugin registrations will be inserted here. To retain this feature, don't remove this comment.]
+
 
   shim:
     bootstrap:
