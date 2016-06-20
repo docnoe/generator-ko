@@ -58,7 +58,7 @@ var ComponentGenerator = yeoman.generators.NamedBase.extend({
             };
             var regex = new RegExp('^(\\s*)(' + token.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&') + ')', 'm'),
                 modulePath = 'components/' + this.filename + '/' + this.filename,
-                lineToAdd = this.usesCoffeeScript ? 'ko.components.register \"' + this.filename + '\", \n\t\trequire: \'' + modulePath + '\'' : 'ko.components.register(\'' + this.filename + '\', { require: \'' + modulePath + '\' });',
+                lineToAdd = this.usesCoffeeScript ? 'ko.components.register \"' + this.filename + '\", \n    require: \'' + modulePath + '\'' : 'ko.components.register(\'' + this.filename + '\', { require: \'' + modulePath + '\' });',
                 newContents = existingContents.replace(regex, '$1' + lineToAdd + '\n$&');
             fs.writeFile(startupFile, newContents);
             this.log(chalk.green('   registered ') + chalk.white(this.filename) + chalk.green(' in ') + chalk.white(startupFile));
