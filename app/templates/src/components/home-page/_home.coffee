@@ -5,7 +5,7 @@ define [
 
   class HomeViewModel
     constructor: ->
-      @message = ko.observable('Welcome to <%= longName.replace("'", "\\ '") %>!');
+      @message = ko.observable 'Welcome to <%= longName.replace("'", "\\ '") %>!'
 
     doSomething: ->
       @message "You invoked doSomething() on the viewmodel."
